@@ -1,6 +1,7 @@
 """
 data-automation-service
 
+
 Small pipeline that fetches sample data from an HTTP API,
 saves it to data/raw_YYYYMMDD.json and logs how many records were stored.
 Later this will be wired to a real estate open-data API (Dubai / EU).
@@ -53,10 +54,14 @@ def generate_report(payload: dict, output_dir: Path = Path("reports")) -> Path:
     fetched_at = payload.get("fetched_at", "")
 
     record_count = len(data)
+    sample_ids = [item.get("id") for item in data[:3]]
+    posts_by_user_1 = sum(1 for item in data if item.get("userId") == 1)
 
     report = {
         "fetched_at": fetched_at,
         "record_count": record_count,
+        "sample_ids": sample_ids,
+        "posts_by_user_1": posts_by_user_1,
         "source": "jsonplaceholder.typicode.com/posts",
     }
 
