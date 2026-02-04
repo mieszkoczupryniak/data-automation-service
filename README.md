@@ -32,3 +32,21 @@ Build a small, realistic backend-style service that:
 - [ ] Step 2 – basic data fetch and save  
 - [ ] Step 3 – first report  
 - [ ] Step 4 – packaging and cleanup
+
+## Data pipeline
+
+This repository contains a small data pipeline that:
+
+- fetches sample JSON data from a public HTTP API,
+- stores the raw payload under `data/raw_YYYYMMDD.json`,
+- generates a daily summary report under `reports/summary_YYYYMMDD.json`.
+
+The summary report currently includes:
+
+- `record_count` – total number of records fetched,
+- `sample_ids` – a small sample of record IDs to quickly inspect the dataset,
+- `posts_by_user_1` – basic user-level aggregation example,
+- `fetched_at` and `source` – metadata for traceability.
+
+In the next iteration this fake API will be replaced with real estate open-data (Dubai / EU) to demonstrate a simple ETL pipeline for property transactions.
+
