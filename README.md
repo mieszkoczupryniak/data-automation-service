@@ -50,3 +50,20 @@ The summary report currently includes:
 
 In the next iteration this fake API will be replaced with real estate open-data (Dubai / EU) to demonstrate a simple ETL pipeline for property transactions.
 
+## Real estate ETL
+
+The project also includes a small real estate ETL pipeline:
+
+- Input: `data/real_estate_transactions.csv` with columns  
+  `transaction_id,date,price,city,district,area_m2,rooms`.
+- Processing: load rows, cast numeric fields, compute global stats and per‑district aggregates.
+- Output: `reports/real_estate_summary_YYYYMMDD.json` with:
+  - `record_count`, `avg_price`, `avg_price_per_m2`, `avg_area_m2`,
+  - `city` (example market),
+  - `by_district` (record count, average price and price per m² per district).
+
+You can run the ETL with:
+
+```bash
+python scripts/real_estate_etl.py
+
