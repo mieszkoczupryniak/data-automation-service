@@ -43,18 +43,47 @@ def save_data_to_file(payload: dict) -> Path:
     return output_path
 
 
+def generate_report(payload: dict, output_dir: Path = Path("reports")) -> Path:
+    """
+    Generate a simple summary report from fetched data and save it to reports/summary_YYYYMMDD.json.
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    data = payload.get("data", [])
+    fetched_at = payload.get("fetched_at", "")
+
+    record_count = len(data)
+
+    report = {
+        "fetched_at": fetched_at,
+        "record_count": record_count,
+        "source": "jsonplaceholder.typicode.com/posts",
+    }
+
+    date_tag = datetime.datetime.utcnow().strftime("%Y%m%d")
+    report_path = output_dir / f"summary_{date_tag}.json"
+
+    with report_path.open("w", encoding="utf-8") as f:
+        json.dump(report, f, ensure_ascii=False, indent=2)
+
+    return report_path
+
+
 def main() -> None:
     today = datetime.date.today()
     print(f"[data-automation-service] Running pipeline for {today}")
 
     payload = fetch_real_estate_data()
-    output_path = save_data_to_file(payload)
+    raw_path = save_data_to_file(payload)
 
     num_records = len(payload.get("data", []))
     print(
         f"[data-automation-service] Saved {num_records} records "
-        f"to {output_path}"
+        f"to {raw_path}"
     )
+
+    report_path = generate_report(payload, Path("reports"))
+    print(f"[data-automation-service] Generated report at {report_path}")
 
 
 if __name__ == "__main__":
