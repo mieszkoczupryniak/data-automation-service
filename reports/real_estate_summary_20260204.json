@@ -1,0 +1,30 @@
+{
+  "record_count": 3,
+  "avg_price": 1416666.6666666667,
+  "avg_price_per_m2": 17932.489451476795,
+  "avg_area_m2": 79.0,
+  "city": "Dubai",
+  "by_district": {
+    "Business Bay": {
+      "record_count": 1,
+      "total_price": 1200000.0,
+      "total_area_m2": 72.0,
+      "avg_price": 1200000.0,
+      "avg_price_per_m2": 16666.666666666668
+    },
+    "Marina": {
+      "record_count": 1,
+      "total_price": 950000.0,
+      "total_area_m2": 55.0,
+      "avg_price": 950000.0,
+      "avg_price_per_m2": 17272.727272727272
+    },
+    "Downtown": {
+      "record_count": 1,
+      "total_price": 2100000.0,
+      "total_area_m2": 110.0,
+      "avg_price": 2100000.0,
+      "avg_price_per_m2": 19090.909090909092
+    }
+  }
+}
