@@ -2,68 +2,83 @@
 
 Production-style data & automation service – fetch real-world data, store it, and generate simple reports. First portfolio project in my AI/infra journey.
 
-## Goal
+## Features
 
-Build a small, realistic backend-style service that:
-- pulls real data from a public API,
-- stores it in a local database or CSV,
-- generates simple analytical reports (daily/weekly),
-- can be extended later with alerts, dashboards or ML.
+- HTTP JSON pipeline that fetches data from a public API, stores raw daily snapshots and generates summary reports.
+- Real estate ETL pipeline that reads CSV transactions, computes per‑district stats, average price and price per m².
+- Simple CLI to choose which pipeline to run (`--job http_pipeline` or `--job real_estate_etl`).
+- Clear project structure with separate `data/` and `reports/` folders, ready to plug into larger data/infra stacks.
+- AI‑ready design for adding LLM summaries and alerting agents on top of the generated reports.
 
-## Tech stack (initial)
+## How to run
 
-- Python 3.x
-- `requests` for HTTP calls
-- `pandas` for data processing
-- SQLite or CSV for storage
+1. Clone the repository:
 
-## Roadmap
+   ```bash
+   git clone https://github.com/mieszkoczupryniak/data-automation-service.git
+   cd data-automation-service
+Install dependencies (inside a virtual environment if you prefer):
 
-1. Basic project structure (src/, config, simple script).
-2. Fetch data from one public API and save it locally.
-3. Add simple reporting (aggregations, summaries).
-4. Package the service as a CLI/cron-friendly script.
-5. Add tests, logging and better error handling.
-6. (Later) Docker + basic CI.
+bash
+pip install -r requirements.txt
+Run the HTTP JSON pipeline:
 
-## Status
+bash
+python -m src.main --job http_pipeline
+This will create:
 
-- [ ] Step 1 – project skeleton  
-- [ ] Step 2 – basic data fetch and save  
-- [ ] Step 3 – first report  
-- [ ] Step 4 – packaging and cleanup
+data/raw_YYYYMMDD.json
 
-## Data pipeline
+reports/summary_YYYYMMDD.json
 
+Run the real estate ETL pipeline:
+
+bash
+python -m src.main --job real_estate_etl
+This will create:
+
+reports/real_estate_summary_YYYYMMDD.json
+
+Data pipeline (HTTP JSON)
 This repository contains a small data pipeline that:
 
-- fetches sample JSON data from a public HTTP API,
-- stores the raw payload under `data/raw_YYYYMMDD.json`,
-- generates a daily summary report under `reports/summary_YYYYMMDD.json`.
+fetches sample JSON data from a public HTTP API,
+
+stores the raw payload under data/raw_YYYYMMDD.json,
+
+generates a daily summary report under reports/summary_YYYYMMDD.json.
 
 The summary report currently includes:
 
-- `record_count` – total number of records fetched,
-- `sample_ids` – a small sample of record IDs to quickly inspect the dataset,
-- `posts_by_user_1` – basic user-level aggregation example,
-- `fetched_at` and `source` – metadata for traceability.
+record_count – total number of records fetched,
 
-In the next iteration this fake API will be replaced with real estate open-data (Dubai / EU) to demonstrate a simple ETL pipeline for property transactions.
+sample_ids – a small sample of record IDs to quickly inspect the dataset,
 
-## Real estate ETL
+posts_by_user_1 – basic user-level aggregation example,
 
+fetched_at and source – metadata for traceability.
+
+In a future iteration this placeholder API can be replaced with real estate open‑data (Dubai / EU) to demonstrate a full external‑API ETL.
+
+Real estate ETL
 The project also includes a small real estate ETL pipeline:
 
-- Input: `data/real_estate_transactions.csv` with columns  
-  `transaction_id,date,price,city,district,area_m2,rooms`.
-- Processing: load rows, cast numeric fields, compute global stats and per‑district aggregates.
-- Output: `reports/real_estate_summary_YYYYMMDD.json` with:
-  - `record_count`, `avg_price`, `avg_price_per_m2`, `avg_area_m2`,
-  - `city` (example market),
-  - `by_district` (record count, average price and price per m² per district).
+Input: data/real_estate_transactions.csv with columns
+transaction_id,date,price,city,district,area_m2,rooms
 
-You can run the ETL with:
+Processing: load rows, cast numeric fields, compute global stats and per‑district aggregates.
 
-```bash
-python scripts/real_estate_etl.py
+Output: reports/real_estate_summary_YYYYMMDD.json with:
 
+record_count, avg_price, avg_price_per_m2, avg_area_m2,
+
+city (example market),
+
+by_district (record count, average price and price per m² per district).
+
+Future AI extensions
+Use an LLM to generate human‑readable daily summaries from the JSON reports (for managers or investors).
+
+Add alerting logic or an AI agent that notifies when average price per m² crosses a threshold or unusual patterns appear.
+
+Replace the placeholder HTTP API with real Dubai / EU open‑data sources and combine multiple markets in one report.
